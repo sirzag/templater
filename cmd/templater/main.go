@@ -20,7 +20,6 @@ func main() {
 	hasTemplates := utils.CheckTemplates(templateDir)
 	if !hasTemplates {
 		fmt.Printf("Please add template files to: %s\n", templateDir)
-		os.Exit(0)
 	}
 
 	commands, err := cmd_resolver.BuildCommands()

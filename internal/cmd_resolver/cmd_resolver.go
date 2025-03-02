@@ -7,20 +7,29 @@ import (
 	"path/filepath"
 	"regexp"
 
+	"github.com/labstack/gommon/log"
 	"github.com/sirzag/templater/internal/prompter"
 	"github.com/sirzag/templater/internal/template_builder"
 	"github.com/sirzag/templater/internal/template_config"
 	"github.com/sirzag/templater/internal/utils"
-	"github.com/labstack/gommon/log"
 	"github.com/urfave/cli/v3"
 )
 
 var (
-	commands      []*cli.Command = make([]*cli.Command, 0)
-	configPattern                = regexp.MustCompile(`.*\.config\.(json|jsonc)$`)
+	configPattern = regexp.MustCompile(`.*\.config\.(json|jsonc)$`)
 )
 
 func BuildCommands() ([]*cli.Command, error) {
+	commands := []*cli.Command{
+		{
+			Name:  "locate",
+			Usage: "The command will open the template directory",
+			Action: func(ctx context.Context, cmd *cli.Command) error {
+				return OpenTemplateDir()
+			},
+		},
+	}
+
 	filepath.Walk(utils.GetTemplateDir(), func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			log.Errorf("Error walking path: %v", err)
